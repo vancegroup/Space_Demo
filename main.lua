@@ -1,8 +1,13 @@
+-- This is a Demo for the star wars death star
+-- by: John Danielson
+require("Text")
 require("AddAppDirectory")
 AddAppDirectory()
 
-runfile[[simpleLights.lua]]
-
+runfile[[lights.lua]]
+runfile[[navigation.lua]]
+runfile[[ScrollingText.lua]]
+runfile[[solarSystem.lua]]
 local function CenterTransformAtPosition(xform, pos)
 	local bound = xform:getBound()
 	return Transform{
@@ -11,47 +16,53 @@ local function CenterTransformAtPosition(xform, pos)
 	}
 end
 
-local vortex = Transform{
-	Model[[models/vortex.ive]],
-	orientation = AngleAxis(Degrees(30), Axis{1.0, 0.0, 0.0}),
-	scale = .01,
+dome = Transform{
+	position = {0, 0, 0},
+	Model("models/dome.osg"),
+	scale=50,
 }
-vortex = CenterTransformAtPosition(vortex,{0,-5,-14})
+RelativeTo.World:addChild(dome)
 
-local solarSystem = Transform{
-	Model[[models/solarsystem.ive]],
-	position = {5,0,-25},
-	orientation = AngleAxis(Degrees(-90), Axis{0.0, 1.0, 0.0}),
-	scale = 0.01,
-}
 
 local shuttle_sw = Transform{
 	Transform{
-		Model[[models/shuttle_sw.ive]],
+		Model("models/shuttle_sw.ive"),
 		orientation = AngleAxis(Degrees(-90), Axis{1.0, 0.0, 0.0}),
 	},
 	orientation = AngleAxis(Degrees(180), Axis{0.0, 1.0, 0.0}),
-	scale = .0001,
+	scale = .00005,
 }
-shuttle_sw = CenterTransformAtPosition(shuttle_sw,{0,0,0})
-
-local shuttle = Transform{
-	Model[[models/shuttle.ive]],
-	orientation = AngleAxis(Degrees(10), Axis{1.0, 0.0, 0.0}),
-	scale = 0.1,
-}
-shuttle = CenterTransformAtPosition(shuttle,{0,0,-10})
-
-local iss = Transform{
-	Model[[models/iss.ive]],
-	orientation = AngleAxis(Degrees(20), Axis{1.0, 0.0, 0.0}),
-	scale = 50,
-}
-iss = CenterTransformAtPosition(iss,{5,10,-15})
-
-
-RelativeTo.World:addChild(vortex)
-RelativeTo.World:addChild(solarSystem)
-RelativeTo.World:addChild(shuttle)
+shuttle_sw = CenterTransformAtPosition(shuttle_sw,{4, -2, -10})
 RelativeTo.World:addChild(shuttle_sw)
-RelativeTo.World:addChild(iss)
+
+starwars = Transform{
+	position = {4, -2, -25},
+	Model("models/deathstar.osg"),
+	scale=2.5,
+	orientation = AngleAxis(Degrees(180), Axis{0.0, 1.0, 0.0}),
+}
+RelativeTo.World:addChild(starwars)
+
+lightsaber = Transform{
+	position = {1.35, 0.0, 0.45},
+	Model("models/lightsaber.osg"),
+	scale = 0.5,
+}
+
+local xform = osg.MatrixTransform()
+RelativeTo.Room:addChild(xform)
+xform:addChild(lightsaber)
+
+Actions.addFrameAction(
+	function()
+		local device = gadget.PositionInterface("VJWand")
+		while true do
+			xform:setMatrix(device.matrix)
+			Actions.waitForRedraw()
+		end
+	end
+)
+
+
+
+

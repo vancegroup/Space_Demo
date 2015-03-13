@@ -8,6 +8,7 @@ runfile[[lights.lua]]
 runfile[[navigation.lua]]
 runfile[[ScrollingText.lua]]
 runfile[[solarSystem.lua]]
+
 local function CenterTransformAtPosition(xform, pos)
 	local bound = xform:getBound()
 	return Transform{
@@ -15,6 +16,21 @@ local function CenterTransformAtPosition(xform, pos)
 		xform,
 	}
 end
+
+tie1 = Transform{
+	position = {0,0,-10},
+	scale = .1,
+	orientation = AngleAxis(Degrees(90), Axis{0.0, 1.0, 0.0}),
+	CenterTransformAtPosition(Transform{Model[[models/tie.ive]]}, {0,0,0})
+}
+RelativeTo.World:addChild(tie1)
+
+shootable_objects = {tie1}
+
+
+runfile[[shoot_and_explode.lua]]
+--define a table called "shootable_objects" and list our objects we want to be shootable
+
 
 dome = Transform{
 	position = {0, 0, 0},

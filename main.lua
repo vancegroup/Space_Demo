@@ -5,9 +5,16 @@ require("AddAppDirectory")
 AddAppDirectory()
 
 runfile[[lights.lua]]
-runfile[[navigation.lua]]
 runfile[[ScrollingText.lua]]
 runfile[[solarSystem.lua]]
+runfile[[Navigation.lua]]
+
+myNav = FlyOrWalkNavigation{
+	start = "flying",
+	switchButton = gadget.DigitalInterface("WMButtonPlus"),
+	initiateRotationButton1 = gadget.DigitalInterface("WMButtonRight"),
+	initiateRotationButton2 = gadget.DigitalInterface("WMButtonLeft"),
+}
 
 local function CenterTransformAtPosition(xform, pos)
 	local bound = xform:getBound()
@@ -17,6 +24,23 @@ local function CenterTransformAtPosition(xform, pos)
 	}
 end
 
+big = Transform{
+	position = {8,10,-25},
+	scale = .00005,
+	orientation = AngleAxis(Degrees(25), Axis{1.0, 0.0, 0.0}),
+	CenterTransformAtPosition(Transform{Model[[models/big.ive]]}, {0,0,0})
+}
+RelativeTo.World:addChild(big)
+
+
+ships3 = Transform{
+	position = {-3,7,-15},
+	scale = .005,
+	orientation = AngleAxis(Degrees(90), Axis{0.0, 1.0, 0.0}),
+	CenterTransformAtPosition(Transform{Model[[models/3ships.ive]]}, {0,0,0})
+}
+RelativeTo.World:addChild(ships3)
+
 tie1 = Transform{
 	position = {0,0,-10},
 	scale = .1,
@@ -25,7 +49,33 @@ tie1 = Transform{
 }
 RelativeTo.World:addChild(tie1)
 
-shootable_objects = {tie1}
+tie2 = Transform{
+	position = {2,0,-8},
+	scale = .1,
+	orientation = AngleAxis(Degrees(90), Axis{0.0, 1.0, 0.0}),
+	CenterTransformAtPosition(Transform{Model[[models/tie.ive]]}, {0,0,0})
+}
+RelativeTo.World:addChild(tie2)
+
+tie3 = Transform{
+	position = {1,0,-5},
+	scale = .1,
+	orientation = AngleAxis(Degrees(90), Axis{0.0, 1.0, 0.0}),
+	CenterTransformAtPosition(Transform{Model[[models/tie.ive]]}, {0,0,0})
+}
+RelativeTo.World:addChild(tie3)
+
+
+tie4 = Transform{
+	position = {1,5,-4},
+	scale = .1,
+	orientation = AngleAxis(Degrees(90), Axis{0.0, 1.0, 0.0}),
+	CenterTransformAtPosition(Transform{Model[[models/tie.ive]]}, {0,0,0})
+}
+RelativeTo.World:addChild(tie4)
+
+
+shootable_objects = {tie1,tie2,tie3,tie4}
 
 
 runfile[[shoot_and_explode.lua]]
@@ -35,7 +85,7 @@ runfile[[shoot_and_explode.lua]]
 dome = Transform{
 	position = {0, 0, 0},
 	Model("models/dome.osg"),
-	scale=50,
+	scale=100,
 }
 RelativeTo.World:addChild(dome)
 

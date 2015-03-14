@@ -5,7 +5,6 @@ end
 function proximityChecker(obj1,obj2,proximity,functionToExecute)
 	if obj1 and obj2 then
 		Actions.addFrameAction(function()
-			print("adding frame")
 			local distanceBetweenObjects = interObjectDistance(obj1,obj2)
 			while distanceBetweenObjects > proximity do
 				if obj1 and obj2 then
